@@ -1,28 +1,19 @@
-#include <iostream>
-#include <ctime>
-#include <cstdlib>
-
-using namespace std;
-
 enum class enDifficulty {
     Easy = 1,
     Medium = 2,
     Hard = 3,
     Mix = 4
 };
-
 enum class enOperation {
     Add = 1,
     Subtract = 2,
     Multiply = 3,
     Divide = 4
 };
-
 enum class enAnswers {
     Correct = 1,
     Incorrect = 2
 };
-
 struct stQuizzInfo {
     short QuestionNumber;
     enDifficulty QuestionDifficulty;
@@ -30,7 +21,6 @@ struct stQuizzInfo {
     enAnswers YourAnswer;
     short CorrectAnswer;
 };
-
 struct stQuizzResults {
     short NumberOfQuestions;
     enDifficulty QuizzDifficulty;
@@ -38,7 +28,6 @@ struct stQuizzResults {
     short NumberOfRightAnswers;
     short NumberOfWrongAnswers;
 };
-
 short HowManyQuestions() {
     short numberOfQuestions;
     do {
@@ -47,7 +36,6 @@ short HowManyQuestions() {
     } while (numberOfQuestions < 1 || numberOfQuestions > 10);
     return numberOfQuestions;
 }
-
 enDifficulty GenerateQuestionDifficulty() {
     int difficulty;
     do {
@@ -57,7 +45,6 @@ enDifficulty GenerateQuestionDifficulty() {
 
     return static_cast<enDifficulty>(difficulty);
 }
-
 enOperation QuizzOperator() {
     int operation;
     do {
@@ -67,11 +54,9 @@ enOperation QuizzOperator() {
 
     return static_cast<enOperation>(operation);
 }
-
 int RandomNumber(int from, int to) {
     return rand() % (to - from + 1) + from;
 }
-
 bool GenerateQuestion(stQuizzInfo& QuizzInfo) {
     short a, b;
     a = RandomNumber(0, 80);
@@ -106,7 +91,6 @@ bool GenerateQuestion(stQuizzInfo& QuizzInfo) {
 
     return userAnswer == QuizzInfo.CorrectAnswer;
 }
-
 stQuizzResults PlayQuizz() {
     stQuizzResults Results{};
     Results.NumberOfQuestions = HowManyQuestions();
@@ -122,18 +106,21 @@ stQuizzResults PlayQuizz() {
 
     for (short i = 0; i < Results.NumberOfQuestions; ++i) {
         cout << "\nQuestion " << i + 1 << ":\n";
-        if (GenerateQuestion(QuizzInfo))
+        if (GenerateQuestion(QuizzInfo)) {
             correctAnswers++;
-        else
+            system("color 2F");
+        }
+        else {
             wrongAnswers++;
-    }
+            system("color 4F");
+        }
+        }
 
     Results.NumberOfRightAnswers = correctAnswers;
     Results.NumberOfWrongAnswers = wrongAnswers;
 
     return Results;
 }
-
 void ShowQuizzResults(const stQuizzResults& results) {
     cout << "\n**** QUIZ RESULTS ****\n";
     cout << "Total Number Of Questions: " << results.NumberOfQuestions << endl;
@@ -141,12 +128,20 @@ void ShowQuizzResults(const stQuizzResults& results) {
     cout << "Operation Type: " << static_cast<int>(results.OperationType) << endl;
     cout << "Number Of Correct Answers: " << results.NumberOfRightAnswers << endl;
     cout << "Number Of Wrong Answers: " << results.NumberOfWrongAnswers << endl;
+    if (results.NumberOfRightAnswers > results.NumberOfWrongAnswers)
+        cout << system("color 2F");
+    else
+        cout << system("color 4F");
 }
-
+void RestartScreen() {
+    system("cls");
+    system("color 0F");
+}
 void StartGame() {
     srand(static_cast<unsigned>(time(nullptr)));
     char restart;
     do {
+        RestartScreen();
         stQuizzResults QuizzResults = PlayQuizz();
         ShowQuizzResults(QuizzResults);
         cout << "Do You Want To Play Again? (y/n): ";
